@@ -20,14 +20,14 @@ Each session produces a finished composition that can be exported as a PNG, crea
 
 This version is a structural upgrade, not a visual polish.
 
-Fully browser-based (no design software required)
-Runs independently on any device (laptop, tablet, kiosk)
-Word limit increased from 100 → 500 words
-Timer expanded from 20–60 seconds → 30 seconds to 5 minutes (30-sec increments)
-Built-in PNG export (no longer a future feature)
-Letterpress-inspired visual design
-Two distinct composition zones: The Page (canvas) and The Tray (word bank)
-Free-form placement on the canvas (not grid-restricted)
+-Fully browser-based (no design software required)
+-Runs independently on any device (laptop, tablet, kiosk)
+-Word limit increased from 100 → 500 words
+-Timer expanded from 20–60 seconds → 30 seconds to 5 minutes (30-sec increments)
+-Built-in PNG export (no longer a future feature)
+-Letterpress-inspired visual design
+-Two distinct composition zones: The Page (canvas) and The Tray (word bank)
+-Free-form placement on the canvas (not grid-restricted)
 
 Poetry Pieces has shifted from a guided prototype to a tool that can be used without the creator present.
 
@@ -100,11 +100,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 Built as part of the ADSS creative practice and grounded in Experiential Language Architecture.
 Thanks to the poets, participants, and collaborators who continue to shape how this tool evolves.
-License
-
-
-
-
-Acknowledgements
-Thanks to everyone who has provided feedback and suggestions for improving the app.
-Special thanks to all the poets and creative minds who use this app to express themselves!
