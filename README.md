@@ -1,24 +1,24 @@
-Poetry Pieces — Standalone Composition Tool
-
+**Poetry Pieces — Standalone Composition Tool
+**
 Poetry Pieces is an interactive, browser-based poetry composition environment. It transforms any text into movable word tiles, allowing participants to physically arrange language and create original poetic compositions in real time.
 
 It is built using Experiential Language Architecture (ELA) — a framework that structures language to produce specific, repeatable human experiences.
 
 Originally developed as a prototype in Figma, Poetry Pieces has evolved into a fully standalone tool that can be installed and run on any device with a browser.
 
-🚀 Live App
-
+**🚀 Live App
+**
 https://adssdesigns.github.io/poetry-pieces-app/
 
-What It Is
-
+**What It Is
+**
 Poetry Pieces functions as a self-contained poetry station.
 Participants enter text, receive a generated word bank, and compose visually by arranging tiles on a digital page.
 
 Each session produces a finished composition that can be exported as a PNG, creating both an experience and a take-home artifact.
 
-What’s New (2026 Update)
-
+**What’s New (2026 Update)
+**
 This version is a structural upgrade, not a visual polish.
 
 Fully browser-based (no design software required)
@@ -32,8 +32,8 @@ Free-form placement on the canvas (not grid-restricted)
 
 Poetry Pieces has shifted from a guided prototype to a tool that can be used without the creator present.
 
-Core Features
-
+**Core Features
+**
 Text Input
 Enter or paste up to 500 words to generate a word bank.
 
@@ -54,8 +54,8 @@ When time ends, the composition is fixed in place.
 PNG Export
 Download a clean image of the final poem.
 
-How to Use
-
+**How to Use
+**
 Enter or paste text into the input field
 Generate your word bank in The Tray
 (Optional) Set a timer
@@ -72,8 +72,8 @@ Constraint (time, word set) produces variation and emergence
 
 The letterpress-inspired aesthetic and separation between The Page and The Tray are intentional—designed to influence how participants engage with language.
 
-Use Cases
-
+**Use Cases
+**
 Poetry Pieces is designed to be deployed across environments:
 
 Gallery installations
@@ -83,8 +83,8 @@ Independent creative exploration
 
 Any organization with a device and a browser can run Poetry Pieces as an interactive station.
 
-Future Directions
-
+**Future Directions
+**
 Multi-device / collaborative composition
 Archive or gallery of past compositions
 Curated text libraries
@@ -92,7 +92,7 @@ Event-level collection of exported works
 
 These will be developed based on real-world use cases.
 
-License
+**License**
 
 This project is licensed under the [MIT License](LICENSE).
 
