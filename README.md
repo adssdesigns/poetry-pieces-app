@@ -97,7 +97,7 @@ License
 This project is licensed under the [MIT License](LICENSE).
 
 
-Acknowledgements
+**Acknowledgements**
 
 Built as part of the ADSS creative practice and grounded in Experiential Language Architecture.
 Thanks to the poets, participants, and collaborators who continue to shape how this tool evolves.
