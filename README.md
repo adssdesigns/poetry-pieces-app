@@ -6,14 +6,13 @@ Welcome to the Moveable Poetry App! This web application allows you to interact 
 
 Features
 
-Text Input: Paste or type up to 100 words from any text.
-Word Bank Creation: Break down the input text into individual draggable tiles.
+Word limit: 100 → 500
 
-Timer: Default 20 seconds, adjustable up to 60 seconds in 10-second increments.
-Moveable Tiles: Create your own poem by moving words around the screen.
+Timer range: 20–60 seconds → 30 seconds to 5 minutes in 30-second increments
 
-Time’s Up: Once the timer ends, the tiles become locked in place.
-Screenshot Capture: An image of your poem arrangement is automatically saved (future feature).
+Screenshot Capture is no longer "future feature" — it's live as PNG export
+
+Add: rebuilt with letterpress-inspired visual design, two clearly distinct zones (The Page / The Tray), free-form placement on the canvas
 
 How to Use
 
