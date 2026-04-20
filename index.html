@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Primary SEO -->
+<title>Poetry Pieces — A Language Composition Tool by ADSS</title>
+<meta name="description" content="Poetry Pieces is a browser-based composition tool built on Experiential Language Architecture. Paste a passage, arrange word tiles against a timer, export your poem." />
+<meta name="author" content="Armstead Dickerson, ADSS Creative Studio" />
+<meta name="keywords" content="poetry pieces, ADSS Creative Studio, Experiential Language Architecture, ELA, Versescape, poetry game, language architecture, composition tool, Armstead Dickerson" />
+<link rel="canonical" href="https://pieces.adss.studio/" />
+
+<!-- Open Graph (Facebook, LinkedIn, iMessage, Slack previews) -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pieces.adss.studio/" />
+<meta property="og:title" content="Poetry Pieces — A Language Composition Tool by ADSS" />
+<meta property="og:description" content="A browser-based composition tool built on Experiential Language Architecture. Paste a passage, arrange word tiles against a timer, compose a poem." />
+<meta property="og:image" content="https://pieces.adss.studio/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Poetry Pieces — composition tiles on a cream page" />
+<meta property="og:site_name" content="ADSS Creative Studio" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Poetry Pieces — A Language Composition Tool by ADSS" />
+<meta name="twitter:description" content="A browser-based composition tool built on Experiential Language Architecture. Paste a passage, compose against a timer, export your poem." />
+<meta name="twitter:image" content="https://pieces.adss.studio/og-image.png" />
+
+<!-- Theme color for mobile browser chrome -->
+<meta name="theme-color" content="#1a1612" />
+
+<!-- Fonts & libraries -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,700&family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --paper: #f3ede1;
+    --paper-shadow: #e6dfd0;
+    --paper-deep: #ddd4c0;
+    --ink: #1f1a14;
+    --ink-soft: #524940;
+    --ink-faint: #8b7f70;
+    --tray: #221c17;
+    --tray-rim: #0f0c09;
+    --tray-felt: #2e2620;
+    --tile: #faf5e8;
+    --tile-edge: #d9cfb8;
+    --terracotta: #b85c38;
+    --terracotta-deep: #934626;
+    --gold: #c89645;
+    --rule: #c2b89f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Instrument Sans', sans-serif;
+    color: var(--ink);
+    background: #1a1612;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+
+  /* ============ APP SHELL ============ */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    background:
+      radial-gradient(ellipse at top, #2a221c 0%, #15110d 100%);
+  }
+
+  /* ============ HEADER / CONTROLS ============ */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 22px 12px;
+    color: var(--paper);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .brand h1 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .brand .mark {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-bottom: 2px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .ctrl {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid rgba(243, 237, 225, 0.25);
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .ctrl:hover:not(:disabled) {
+    background: rgba(243, 237, 225, 0.08);
+    border-color: rgba(243, 237, 225, 0.5);
+  }
+
+  .ctrl:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ctrl.primary {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: #fdf6ea;
+  }
+
+  .ctrl.primary:hover:not(:disabled) {
+    background: var(--terracotta-deep);
+    border-color: var(--terracotta-deep);
+  }
+
+  .timer-display {
+    font-family: 'Fraunces', serif;
+    font-feature-settings: "tnum" 1;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    min-width: 56px;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  .timer-display.warning { color: var(--gold); }
+  .timer-display.danger {
+    color: var(--terracotta);
+    animation: pulse 0.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+  }
+
+  .timer-pick {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-faint);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .timer-pick select {
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid rgba(243, 237, 225, 0.25);
+    padding: 6px 8px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  /* Options inherit the select's cream color by default, which makes them
+     invisible against the white OS menu background. Force readable contrast
+     when the dropdown is opened. */
+  .timer-pick select option {
+    color: var(--ink);
+    background: var(--paper);
+    font-family: 'Instrument Sans', sans-serif;
+  }
+
+  .timer-pick select:focus { outline: 1px solid var(--gold); }
+
+  /* progress line */
+  .progress-rail {
+    height: 2px;
+    background: rgba(255,255,255,0.05);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    position: absolute;
+    inset: 0 100% 0 0;
+    background: linear-gradient(90deg, var(--gold), var(--terracotta));
+    transition: right 0.3s linear;
+  }
+
+  /* ============ CANVAS (POEM SPACE) ============ */
+  .canvas-wrap {
+    flex: 1;
+    padding: 18px 22px 8px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .zone-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-faint);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .zone-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .canvas {
+    flex: 1;
+    position: relative;
+    background: var(--paper);
+    border-radius: 3px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.04),
+      0 20px 40px rgba(0,0,0,0.35),
+      inset 0 0 60px rgba(154, 130, 90, 0.08);
+    overflow: hidden;
+    cursor: default;
+    background-image:
+      radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(120, 90, 50, 0.04) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.28 0 0 0 0.06 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  }
+
+  .canvas-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--ink-faint);
+    pointer-events: none;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .canvas-empty .glyph {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 64px;
+    color: var(--rule);
+    opacity: 0.5;
+    line-height: 1;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .canvas-empty p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+    max-width: 320px;
+  }
+
+  /* ============ TRAY (WORD BANK) ============ */
+  .tray-wrap {
+    padding: 8px 22px 18px;
+    flex-shrink: 0;
+  }
+
+  .tray {
+    background: var(--tray);
+    border-radius: 4px;
+    padding: 14px 18px;
+    min-height: 96px;
+    max-height: 30vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow:
+      inset 0 2px 8px rgba(0,0,0,0.6),
+      inset 0 0 0 1px rgba(0,0,0,0.4),
+      0 1px 0 rgba(255,255,255,0.03);
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.2) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.04 0 0 0 0 0.03 0 0 0 0.5 0'/></filter><rect width='200' height='200' filter='url(%23f)'/></svg>");
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: flex-start;
+  }
+
+  .tray-empty {
+    color: rgba(243, 237, 225, 0.35);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    padding: 18px 4px;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* scrollbar */
+  .tray::-webkit-scrollbar { width: 6px; }
+  .tray::-webkit-scrollbar-track { background: transparent; }
+  .tray::-webkit-scrollbar-thumb {
+    background: rgba(243, 237, 225, 0.15);
+    border-radius: 3px;
+  }
+
+  /* ============ TILES ============ */
+  .tile {
+    font-family: 'EB Garamond', serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--ink);
+    background: var(--tile);
+    padding: 8px 14px 9px;
+    border-radius: 2px;
+    cursor: grab;
+    user-select: none;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow:
+      0 1px 0 var(--tile-edge),
+      0 2px 3px rgba(0,0,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+    transition:
+      transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.18s ease;
+    position: relative;
+    touch-action: none;
+  }
+
+  .tile.in-tray {
+    /* slight individual rotation set inline via JS */
+  }
+
+  .tile.in-tray:hover {
+    transform: translateY(-2px) rotate(0deg) !important;
+    z-index: 10;
+    box-shadow:
+      0 2px 0 var(--tile-edge),
+      0 6px 10px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .tile.on-canvas {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .tile.on-canvas:hover {
+    z-index: 5;
+    box-shadow:
+      0 1px 0 var(--tile-edge),
+      0 4px 8px rgba(0,0,0,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .tile.dragging {
+    cursor: grabbing;
+    z-index: 9999;
+    transform: scale(1.05) rotate(-1.5deg);
+    box-shadow:
+      0 1px 0 var(--tile-edge),
+      0 18px 28px rgba(0,0,0,0.45),
+      0 0 0 2px rgba(184, 92, 56, 0.4),
+      inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: box-shadow 0.18s ease;
+  }
+
+  .tile.locked {
+    cursor: default;
+    opacity: 0.92;
+  }
+
+  .tile.locked:hover {
+    transform: none !important;
+    box-shadow:
+      0 1px 0 var(--tile-edge),
+      0 2px 3px rgba(0,0,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  /* tile entrance stagger */
+  @keyframes tileIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .tile.in-tray { animation: tileIn 0.4s both; }
+
+  /* ============ INPUT MODAL ============ */
+  .modal-veil {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 12, 9, 0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .modal-veil.open { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--paper);
+    width: 100%;
+    max-width: 560px;
+    border-radius: 4px;
+    padding: 32px 32px 28px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(255,255,255,0.04);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.28 0 0 0 0.06 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  }
+
+  .modal h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 4px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .modal .sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+
+  .modal textarea {
+    width: 100%;
+    min-height: 160px;
+    background: rgba(255,255,255,0.45);
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+    border-radius: 3px;
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    resize: vertical;
+    outline: none;
+  }
+
+  .modal textarea:focus {
+    border-color: var(--terracotta);
+    box-shadow: 0 0 0 3px rgba(184, 92, 56, 0.15);
+  }
+
+  .modal-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    gap: 12px;
+  }
+
+  .word-count {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .word-count .over { color: var(--terracotta); font-weight: 600; }
+
+  .modal-actions { display: flex; gap: 8px; }
+
+  .modal-btn {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border-radius: 2px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .modal-btn:hover { background: var(--ink); color: var(--paper); }
+
+  .modal-btn.primary {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: #fdf6ea;
+  }
+  .modal-btn.primary:hover { background: var(--terracotta-deep); border-color: var(--terracotta-deep); }
+  .modal-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Export modal preview area — small thumbnail of the canvas */
+  .export-modal h2 {
+    font-style: normal;
+    text-align: center;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    font-size: 22px;
+  }
+  .export-modal .sub { text-align: center; }
+  .export-preview {
+    margin-top: 16px;
+    background: var(--paper-shadow);
+    border-radius: 3px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    box-shadow: inset 0 0 0 1px var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .export-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .export-preview .pending {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--ink-faint);
+    font-size: 13px;
+  }
+  #exportStatus { color: var(--ink-faint); }
+  #exportStatus.success { color: var(--terracotta); }
+  #exportStatus.error { color: var(--terracotta-deep); font-weight: 600; }
+
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .preset {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px dashed var(--rule);
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .preset:hover {
+    color: var(--terracotta);
+    border-color: var(--terracotta);
+    border-style: solid;
+  }
+
+  /* ============ TIME'S UP BANNER ============ */
+  .lock-banner {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8px 18px;
+    border-radius: 2px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .lock-banner.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    animation: bannerIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes bannerIn {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 640px) {
+    .topbar { padding: 12px 14px 10px; flex-wrap: wrap; gap: 8px; }
+    .brand {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .brand h1 { font-size: 20px; }
+    .brand .mark { font-size: 9px; letter-spacing: 0.16em; }
+    .ctrl { padding: 7px 11px; font-size: 11px; }
+    .timer-display { font-size: 18px; min-width: 44px; }
+    .canvas-wrap { padding: 12px 14px 6px; }
+    .tray-wrap { padding: 6px 14px 14px; }
+    .tray { padding: 12px; }
+    .tile { font-size: 17px; padding: 7px 12px 8px; }
+    .modal { padding: 24px 20px 20px; }
+    .modal h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="brand">
+      <h1>Poetry Pieces</h1>
+      <span class="mark">An ADSS Creative Studio Game</span>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl" id="newTextBtn">New Words</button>
+      <div class="timer-pick">
+        <span>Time</span>
+        <select id="timerSelect">
+          <option value="30" selected>0:30</option>
+          <option value="60">1:00</option>
+          <option value="90">1:30</option>
+          <option value="120">2:00</option>
+          <option value="150">2:30</option>
+          <option value="180">3:00</option>
+          <option value="210">3:30</option>
+          <option value="240">4:00</option>
+          <option value="270">4:30</option>
+          <option value="300">5:00</option>
+        </select>
+      </div>
+      <span class="timer-display" id="timerDisplay">0:30</span>
+      <button class="ctrl primary" id="startBtn" disabled>Start</button>
+      <button class="ctrl" id="resetBtn">Reset</button>
+    </div>
+  </header>
+
+  <!-- TIMER PROGRESS -->
+  <div class="progress-rail">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- CANVAS (poem space) -->
+  <div class="canvas-wrap">
+    <div class="zone-label">The Page</div>
+    <div class="canvas" id="canvas">
+      <div class="canvas-empty" id="canvasEmpty">
+        <div class="glyph">¶</div>
+        <p>Drag words from the tray below.<br/>Compose freely.</p>
+      </div>
+      <div class="lock-banner" id="lockBanner">— Time. Your composition is set. —</div>
+    </div>
+  </div>
+
+  <!-- TRAY (word bank) -->
+  <div class="tray-wrap">
+    <div class="zone-label">The Tray · <span id="tileCount" style="color:var(--ink-faint)">0 pieces</span></div>
+    <div class="tray" id="tray">
+      <div class="tray-empty" id="trayEmpty">Click "New Words" to load a passage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- INPUT MODAL -->
+<div class="modal-veil" id="modal">
+  <div class="modal">
+    <h2>A passage to break apart.</h2>
+    <p class="sub">Paste up to 500 words. They become your tiles.</p>
+    <textarea id="textInput" placeholder="Type or paste your text here..." spellcheck="false"></textarea>
+    <div class="preset-row">
+      <button class="preset" data-text="So much depends upon a red wheel barrow glazed with rain water beside the white chickens.">William Carlos Williams</button>
+      <button class="preset" data-text="Hope is the thing with feathers that perches in the soul and sings the tune without the words and never stops at all.">Emily Dickinson</button>
+      <button class="preset" data-text="I have eaten the plums that were in the icebox and which you were probably saving for breakfast forgive me they were delicious so sweet and so cold.">Williams again</button>
+    </div>
+    <div class="modal-foot">
+      <span class="word-count" id="wordCount">0 / 500 words</span>
+      <div class="modal-actions">
+        <button class="modal-btn" id="cancelBtn">Cancel</button>
+        <button class="modal-btn primary" id="loadBtn">Load Tiles</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL (appears when timer ends) -->
+<div class="modal-veil" id="exportModal">
+  <div class="modal export-modal">
+    <h2>— Time. —</h2>
+    <p class="sub">Your composition is set. Save it as a PNG?</p>
+    <div class="export-preview" id="exportPreview" aria-hidden="true"></div>
+    <div class="modal-foot" style="margin-top: 18px;">
+      <span class="word-count" id="exportStatus"></span>
+      <div class="modal-actions">
+        <button class="modal-btn" id="exportSkipBtn">Skip</button>
+        <button class="modal-btn primary" id="exportPngBtn">Export PNG</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ============ STATE ============
+const state = {
+  duration: 30,        // seconds
+  remaining: 30,
+  timerId: null,
+  running: false,
+  locked: false,
+  tiles: []            // {id, word, location: 'tray'|'canvas', x, y, rotation}
+};
+
+// ============ DOM ============
+const $ = (id) => document.getElementById(id);
+const tray = $('tray');
+const canvas = $('canvas');
+const trayEmpty = $('trayEmpty');
+const canvasEmpty = $('canvasEmpty');
+const timerDisplay = $('timerDisplay');
+const timerSelect = $('timerSelect');
+const startBtn = $('startBtn');
+const resetBtn = $('resetBtn');
+const newTextBtn = $('newTextBtn');
+const progressFill = $('progressFill');
+const lockBanner = $('lockBanner');
+const tileCount = $('tileCount');
+const modal = $('modal');
+const textInput = $('textInput');
+const wordCount = $('wordCount');
+const loadBtn = $('loadBtn');
+const cancelBtn = $('cancelBtn');
+const exportModal = $('exportModal');
+const exportPreview = $('exportPreview');
+const exportStatus = $('exportStatus');
+const exportPngBtn = $('exportPngBtn');
+const exportSkipBtn = $('exportSkipBtn');
+
+// ============ INIT ============
+function init() {
+  timerSelect.addEventListener('change', () => {
+    state.duration = parseInt(timerSelect.value, 10);
+    if (!state.running) {
+      state.remaining = state.duration;
+      updateTimerDisplay();
+    }
+  });
+
+  startBtn.addEventListener('click', startTimer);
+  resetBtn.addEventListener('click', () => resetAll(false));
+  newTextBtn.addEventListener('click', openModal);
+  cancelBtn.addEventListener('click', closeModal);
+  loadBtn.addEventListener('click', loadFromInput);
+
+  textInput.addEventListener('input', updateWordCount);
+
+  document.querySelectorAll('.preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      textInput.value = btn.dataset.text;
+      updateWordCount();
+    });
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Export modal
+  exportPngBtn.addEventListener('click', exportAsPng);
+  exportSkipBtn.addEventListener('click', closeExportModal);
+  exportModal.addEventListener('click', (e) => {
+    if (e.target === exportModal) closeExportModal();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (modal.classList.contains('open')) closeModal();
+      if (exportModal.classList.contains('open')) closeExportModal();
+    }
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && modal.classList.contains('open')) loadFromInput();
+  });
+
+  updateTimerDisplay();
+  updateTileCount();
+}
+
+// ============ MODAL ============
+function openModal() {
+  modal.classList.add('open');
+  setTimeout(() => textInput.focus(), 50);
+  updateWordCount();
+}
+function closeModal() { modal.classList.remove('open'); }
+
+function updateWordCount() {
+  const words = textInput.value.trim().split(/\s+/).filter(Boolean);
+  const n = words.length;
+  const over = n > 500;
+  wordCount.innerHTML = over
+    ? `<span class="over">${n} / 500 words — too many</span>`
+    : `${n} / 500 words`;
+  loadBtn.disabled = n === 0 || over;
+}
+
+function loadFromInput() {
+  const raw = textInput.value.trim();
+  if (!raw) return;
+  // Tokenize: keep only words, strip most punctuation but keep apostrophes (don't, I'll)
+  const words = raw
+    .split(/\s+/)
+    .map(w => w.replace(/[^\p{L}\p{N}'\-]/gu, ''))
+    .filter(Boolean)
+    .slice(0, 500);
+
+  if (words.length === 0) return;
+
+  resetAll(true); // soft reset (don't reload modal)
+  state.tiles = words.map((w, i) => ({
+    id: 'tile_' + i + '_' + Math.random().toString(36).slice(2, 6),
+    word: w,
+    location: 'tray',
+    x: 0, y: 0,
+    rotation: (Math.random() * 4 - 2) // -2 to 2 deg
+  }));
+  // Shuffle so tiles in the tray don't read as the original passage.
+  // If they did, a participant could just recreate the source text.
+  shuffle(state.tiles);
+
+  renderTiles();
+  closeModal();
+  startBtn.disabled = false;
+}
+
+// Fisher-Yates shuffle, in-place. Unbiased across all permutations.
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ============ RENDER ============
+function renderTiles() {
+  // Clear
+  tray.querySelectorAll('.tile').forEach(el => el.remove());
+  canvas.querySelectorAll('.tile').forEach(el => el.remove());
+
+  // Render
+  state.tiles.forEach((t, idx) => {
+    const el = document.createElement('div');
+    el.className = 'tile';
+    el.textContent = t.word;
+    el.dataset.id = t.id;
+    el.style.animationDelay = (idx * 0.015) + 's';
+
+    if (t.location === 'tray') {
+      el.classList.add('in-tray');
+      el.style.transform = `rotate(${t.rotation}deg)`;
+      tray.appendChild(el);
+    } else {
+      el.classList.add('on-canvas');
+      el.style.left = t.x + 'px';
+      el.style.top = t.y + 'px';
+      canvas.appendChild(el);
+    }
+
+    if (state.locked) el.classList.add('locked');
+    else attachDragHandlers(el, t);
+  });
+
+  updateEmptyStates();
+  updateTileCount();
+}
+
+function updateEmptyStates() {
+  const trayHas = state.tiles.some(t => t.location === 'tray');
+  const canvasHas = state.tiles.some(t => t.location === 'canvas');
+  trayEmpty.style.display = trayHas ? 'none' : 'block';
+  canvasEmpty.style.display = canvasHas ? 'none' : 'flex';
+}
+
+function updateTileCount() {
+  const n = state.tiles.length;
+  const onCanvas = state.tiles.filter(t => t.location === 'canvas').length;
+  tileCount.textContent = n === 0
+    ? '0 pieces'
+    : `${n - onCanvas} in tray · ${onCanvas} placed`;
+}
+
+// ============ DRAG-AND-DROP ============
+// Each drag attaches WINDOW-level pointermove/pointerup listeners so the drag
+// continues regardless of which element the pointer is over, and survives
+// DOM moves (we re-parent the tile to <body> to escape overflow:hidden).
+// We avoid setPointerCapture entirely — it can drop events when the captured
+// element changes parents in some browsers.
+function attachDragHandlers(el, tile) {
+  el.addEventListener('pointerdown', (e) => {
+    if (state.locked) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return; // left-click only
+    e.preventDefault();
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const rect = el.getBoundingClientRect();
+    const baseX = rect.left;
+    const baseY = rect.top;
+
+    let movedSignificantly = false;
+    let active = true;
+
+    // Lift out of normal flow, pin to viewport coords, escape overflow:hidden
+    el.classList.add('dragging');
+    el.classList.remove('in-tray', 'on-canvas');
+    el.style.position = 'fixed';
+    el.style.left = baseX + 'px';
+    el.style.top = baseY + 'px';
+    el.style.margin = '0';
+    el.style.transform = 'translate(0px, 0px) scale(1.05) rotate(-1.5deg)';
+    el.style.willChange = 'transform';
+    document.body.appendChild(el);
+
+    const onMove = (ev) => {
+      if (!active) return;
+      ev.preventDefault(); // block touch scrolling during drag
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      if (!movedSignificantly && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+        movedSignificantly = true;
+      }
+      // GPU-friendly: only transform changes per frame
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(1.05) rotate(-1.5deg)`;
+    };
+
+    const onUp = (ev) => {
+      if (!active) return;
+      active = false;
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+
+      // Capture rect AFTER transform is still applied — accurate position
+      const eRect = el.getBoundingClientRect();
+
+      el.classList.remove('dragging');
+      el.style.transform = '';
+      el.style.willChange = '';
+      el.style.margin = '';
+
+      const x = ev.clientX, y = ev.clientY;
+      const overCanvas = isOver(canvas, x, y);
+      const overTray = isOver(tray, x, y);
+
+      if (!movedSignificantly) {
+        // Treat as a click — return tile to its origin
+        restoreTile(el, tile);
+        return;
+      }
+
+      if (overCanvas) {
+        const cRect = canvas.getBoundingClientRect();
+        let nx = eRect.left - cRect.left;
+        let ny = eRect.top - cRect.top;
+        // Clamp so tile stays inside the page
+        nx = Math.max(2, Math.min(nx, cRect.width - eRect.width - 2));
+        ny = Math.max(2, Math.min(ny, cRect.height - eRect.height - 2));
+        tile.location = 'canvas';
+        tile.x = nx;
+        tile.y = ny;
+        placeOnCanvas(el, tile);
+      } else if (overTray) {
+        tile.location = 'tray';
+        placeInTray(el, tile);
+      } else {
+        // Dropped in dead zone — return to origin
+        restoreTile(el, tile);
+      }
+
+      // If timer expired mid-drag, lock this tile
+      if (state.locked) el.classList.add('locked');
+
+      updateEmptyStates();
+      updateTileCount();
+    };
+
+    // passive:false is required so onMove can preventDefault on touch
+    window.addEventListener('pointermove', onMove, { passive: false });
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+  });
+}
+
+function isOver(elem, x, y) {
+  const r = elem.getBoundingClientRect();
+  return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+}
+
+function placeOnCanvas(el, tile) {
+  el.style.position = 'absolute';
+  el.style.left = tile.x + 'px';
+  el.style.top = tile.y + 'px';
+  el.classList.remove('in-tray');
+  el.classList.add('on-canvas');
+  canvas.appendChild(el);
+}
+
+function placeInTray(el, tile) {
+  el.style.position = '';
+  el.style.left = '';
+  el.style.top = '';
+  el.style.transform = `rotate(${tile.rotation}deg)`;
+  el.classList.remove('on-canvas');
+  el.classList.add('in-tray');
+  tray.appendChild(el);
+}
+
+function restoreTile(el, tile) {
+  if (tile.location === 'tray') placeInTray(el, tile);
+  else placeOnCanvas(el, tile);
+}
+
+// ============ EXPORT ============
+async function openExportModal() {
+  exportModal.classList.add('open');
+  exportPreview.innerHTML = '<span class="pending">Preparing preview…</span>';
+  exportStatus.textContent = '';
+  exportStatus.className = '';
+  exportPngBtn.disabled = false;
+
+  // Ensure custom fonts are loaded before any rasterization
+  try {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  } catch (_) {}
+
+  // Render a small preview into the modal so user sees what they'll get
+  try {
+    const previewCanvas = await renderCanvasToImage(0.5);
+    exportPreview.innerHTML = '';
+    previewCanvas.style.maxWidth = '100%';
+    previewCanvas.style.maxHeight = '100%';
+    previewCanvas.style.objectFit = 'contain';
+    exportPreview.appendChild(previewCanvas);
+  } catch (err) {
+    console.warn('Preview render failed:', err);
+    exportPreview.innerHTML = '<span class="pending">Preview unavailable — export will still work.</span>';
+  }
+}
+
+function closeExportModal() {
+  exportModal.classList.remove('open');
+}
+
+async function renderCanvasToImage(scale) {
+  if (typeof html2canvas === 'undefined') {
+    throw new Error('html2canvas not loaded');
+  }
+  // Hide any overlay UI inside the canvas during capture
+  const wasShowing = lockBanner.classList.contains('show');
+  lockBanner.style.visibility = 'hidden';
+
+  try {
+    const result = await html2canvas(canvas, {
+      backgroundColor: '#f3ede1',
+      scale: scale,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      letterRendering: true
+    });
+    return result;
+  } finally {
+    lockBanner.style.visibility = '';
+  }
+}
+
+async function exportAsPng() {
+  exportPngBtn.disabled = true;
+  exportStatus.textContent = 'Rendering…';
+  exportStatus.className = '';
+
+  try {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+
+    const rendered = await renderCanvasToImage(2); // 2x for retina sharpness
+
+    rendered.toBlob((blob) => {
+      if (!blob) {
+        exportStatus.textContent = 'Export failed.';
+        exportStatus.className = 'error';
+        exportPngBtn.disabled = false;
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+      a.href = url;
+      a.download = `poetry-pieces-${stamp}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      exportStatus.textContent = 'Saved to your downloads.';
+      exportStatus.className = 'success';
+      exportPngBtn.disabled = false;
+    }, 'image/png');
+  } catch (err) {
+    console.error('Export failed:', err);
+    exportStatus.textContent = 'Export failed. Try again?';
+    exportStatus.className = 'error';
+    exportPngBtn.disabled = false;
+  }
+}
+
+// ============ TIMER ============
+function startTimer() {
+  if (state.running || state.tiles.length === 0) return;
+  state.running = true;
+  state.locked = false;
+  startBtn.disabled = true;
+  timerSelect.disabled = true;
+  newTextBtn.disabled = true;
+
+  const startedAt = Date.now();
+  const total = state.duration * 1000;
+
+  state.timerId = setInterval(() => {
+    const elapsed = Date.now() - startedAt;
+    const remainingMs = Math.max(0, total - elapsed);
+    state.remaining = Math.ceil(remainingMs / 1000);
+    updateTimerDisplay();
+
+    const pct = (1 - remainingMs / total) * 100;
+    progressFill.style.right = (100 - pct) + '%';
+
+    if (remainingMs <= 0) endTimer();
+  }, 100);
+}
+
+function endTimer() {
+  clearInterval(state.timerId);
+  state.timerId = null;
+  state.running = false;
+  state.locked = true;
+  state.remaining = 0;
+  updateTimerDisplay();
+  progressFill.style.right = '0%';
+
+  // Lock all tiles
+  document.querySelectorAll('.tile').forEach(el => el.classList.add('locked'));
+
+  // Show banner
+  lockBanner.classList.add('show');
+  setTimeout(() => lockBanner.classList.remove('show'), 4000);
+
+  startBtn.disabled = true;
+  timerSelect.disabled = false;
+  newTextBtn.disabled = false;
+
+  // Show export prompt — only if there's something on the canvas
+  const hasComposition = state.tiles.some(t => t.location === 'canvas');
+  if (hasComposition) {
+    setTimeout(openExportModal, 1200);
+  }
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(state.remaining / 60);
+  const s = state.remaining % 60;
+  timerDisplay.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+
+  timerDisplay.classList.remove('warning', 'danger');
+  if (state.running && state.duration > 0) {
+    // Percentage-based so thresholds scale: 5s on a 30s game and
+    // 30s on a 5-minute game both feel like "the home stretch."
+    const pct = state.remaining / state.duration;
+    if (pct <= 0.10) timerDisplay.classList.add('danger');
+    else if (pct <= 0.25) timerDisplay.classList.add('warning');
+  }
+}
+
+// ============ RESET ============
+function resetAll(soft = false) {
+  if (state.timerId) clearInterval(state.timerId);
+  state.timerId = null;
+  state.running = false;
+  state.locked = false;
+  state.duration = parseInt(timerSelect.value, 10);
+  state.remaining = state.duration;
+
+  if (!soft) {
+    // Reset button: keep the same word set, but send every tile back to the
+    // tray with a fresh rotation. Same pieces, blank page, ready for another
+    // round. To swap word sets entirely, use "New Words".
+    document.querySelectorAll('.tile').forEach(el => el.classList.remove('locked'));
+    state.tiles.forEach(t => {
+      t.location = 'tray';
+      t.x = 0;
+      t.y = 0;
+      t.rotation = (Math.random() * 4 - 2);
+    });
+    // Reshuffle so the tray doesn't read as the source passage and so each
+    // round starts from a genuinely different arrangement.
+    shuffle(state.tiles);
+    renderTiles();
+    tray.scrollTop = 0;
+    startBtn.disabled = state.tiles.length === 0;
+  } else {
+    // Soft reset (called from loadFromInput before new tiles load)
+    startBtn.disabled = state.tiles.length === 0;
+  }
+
+  timerSelect.disabled = false;
+  newTextBtn.disabled = false;
+  progressFill.style.right = '100%';
+  lockBanner.classList.remove('show');
+  closeExportModal();
+  updateTimerDisplay();
+}
+
+// ============ GO ============
+init();
+</script>
+</body>
+</html>
