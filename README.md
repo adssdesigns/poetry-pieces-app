@@ -1,102 +1,94 @@
-**Poetry Pieces — Standalone Composition Tool**
-Poetry Pieces is an interactive, browser-based poetry composition environment. It transforms any text into movable word tiles, allowing participants to physically arrange language and create original poetic compositions in real time.
+# Poetry Pieces
 
-It is built using Experiential Language Architecture (ELA) — a framework that structures language to produce specific, repeatable human experiences.
+A standalone composition tool for arranging language in real time.
 
-Originally developed as a prototype in Figma, Poetry Pieces has evolved into a fully standalone tool that can be installed and run on any device with a browser.
+**Live app:** (https://adssdesigns.github.io/poetry-pieces-app/)
 
-**🚀 Live App**
+Poetry Pieces transforms any text into movable word tiles. Participants paste a passage, receive a generated word bank, and compose visually — arranging fragments across a digital page under a set time constraint. Each session produces a finished composition that can be exported as a PNG.
 
-https://adssdesigns.github.io/poetry-pieces-app/
+It runs entirely in the browser. No design software, no install, no setup beyond a URL.
 
-**What It Is**
+---
 
-Poetry Pieces functions as a self-contained poetry station.
-Participants enter text, receive a generated word bank, and compose visually by arranging tiles on a digital page.
+## What This Version Is
 
-Each session produces a finished composition that can be exported as a PNG, creating both an experience and a take-home artifact.
+Poetry Pieces was originally built in Figma and used as a live interactive component of a Versescape. That version required manual cleanup between participants, screenshots to capture compositions, and the creator on-site to run it.
 
-**What’s New (2026 Update)**
+The second version was a web-app that included limitations on the number of words, time, and UI. 
 
-This version is a structural upgrade, not a visual polish.
+This version is a structural rebuild. Poetry Pieces now runs as a self-contained poetry station that any organization can deploy on any device with a browser.
 
--Fully browser-based (no design software required)
--Runs independently on any device (laptop, tablet, kiosk)
--Word limit increased from 100 → 500 words
--Timer expanded from 20–60 seconds → 30 seconds to 5 minutes (30-sec increments)
--Built-in PNG export (no longer a future feature)
--Letterpress-inspired visual design
--Two distinct composition zones: The Page (canvas) and The Tray (word bank)
--Free-form placement on the canvas (not grid-restricted)
+### What's New
 
-Poetry Pieces has shifted from a guided prototype to a tool that can be used without the creator present.
+- Fully browser-based — runs independently on any device (laptop, tablet, kiosk, projector)
+- Word limit increased from 100 → 500 words
+- Timer expanded from 20–60 seconds → 30 seconds to 5 minutes, in 30-second increments
+- Built-in PNG export (previously listed as a future feature)
+- Letterpress-inspired visual design
+- Two clearly distinct composition zones: The Page (canvas) and The Tray (word bank)
+- Free-form placement on the canvas (not grid-restricted)
+- Reset returns tiles to The Tray without clearing the word set — ready for the next participant
 
-**Core Features**
+The shift: Poetry Pieces has moved from a guided prototype to a tool that can be used without the creator present.
 
-Text Input
-Enter or paste up to 500 words to generate a word bank.
+---
 
-Moveable Word Tiles
-Drag and arrange words freely across the canvas.
+## How to Use
 
-Dual-Zone Interface
+1. Click **New Words** and enter or paste a passage (up to 500 words)
+2. Select a timer duration
+3. Click **Start** and drag words from The Tray onto The Page to compose
+4. When time ends, the composition locks and an export prompt appears
+5. Save your poem as a PNG, or click **Reset** to pass the device to the next composer
 
-The Tray: holds available words
-The Page: where compositions are created
+---
 
-Timer
-Set a countdown from 30 seconds to 5 minutes in 30-second increments.
+## Design Approach
 
-Locked Composition State
-When time ends, the composition is fixed in place.
+Poetry Pieces is built on **Experiential Language Architecture (ELA)** — a framework developed by ADSS that structures language to produce specific, repeatable human experiences.
 
-PNG Export
-Download a clean image of the final poem.
+The tool's three core constraints — a bounded source text, a bounded time window, and spatial arrangement on a visible page — are not interface decisions. They are compositional conditions. Together they produce a specific kind of writing: faster, stranger, more willing to leave gaps than what participants would produce given unlimited time and vocabulary.
 
-**How to Use**
+The letterpress aesthetic and the clear material separation between The Page and The Tray are intentional. They signal to participants that they are inside a considered space, not a generic interface. The frame produces the work.
 
-Enter or paste text into the input field
-Generate your word bank in The Tray
-(Optional) Set a timer
-Drag words onto The Page to create your composition
-Export your poem as a PNG
-Design Approach
+---
 
-Poetry Pieces embodies principles from Experiential Language Architecture:
-
-Language is treated as a material to be arranged, not just read
-Structure shapes interpretation and outcome
-Spatial design influences creative decision-making
-Constraint (time, word set) produces variation and emergence
-
-The letterpress-inspired aesthetic and separation between The Page and The Tray are intentional—designed to influence how participants engage with language.
-
-**Use Cases**
+## Use Cases
 
 Poetry Pieces is designed to be deployed across environments:
 
-Gallery installations
-Classrooms and workshops
-Conferences and creative activations
-Independent creative exploration
+- Gallery installations and live Versescapes
+- Classrooms, workshops, and residencies
+- Conferences, summits, and creative activations
+- Independent creative practice
 
-Any organization with a device and a browser can run Poetry Pieces as an interactive station.
+Any organization with a browser-capable device can run Poetry Pieces as an interactive station. For larger installations, it runs well projected on a wall with a trackpad or touchscreen for input.
 
-**Future Directions**
+---
 
-Multi-device / collaborative composition
-Archive or gallery of past compositions
-Curated text libraries
-Event-level collection of exported works
+## Future Directions
 
-These will be developed based on real-world use cases.
+- Curated source-text libraries organized by compositional condition
+- Multi-device collaborative composition
+- Event-level archiving of exported compositions
+- Site-specific source text curation tied to individual Versescape engagements
 
-**License**
+These will be developed in response to real-world use.
+
+---
+
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 
+---
 
-**Acknowledgements**
+## About
 
-Built as part of the ADSS creative practice and grounded in Experiential Language Architecture.
-Thanks to the poets, participants, and collaborators who continue to shape how this tool evolves.
+Poetry Pieces is part of ADSS Creative Studio's practice and is grounded in Experiential Language Architecture (ELA). Thanks to the poets, participants, and collaborators who continue to shape how this tool evolves.
+
+*from love, 
+towards togetherness, 
+in forgiveness*
+
+Armstead / ADSS 
